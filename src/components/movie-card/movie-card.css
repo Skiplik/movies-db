@@ -1,0 +1,52 @@
+.movie-card {
+    width: 440px;
+    height: 279px;
+}
+
+.movie-card__img {
+    width: 183px;
+}
+
+.movie-card__meta {
+    padding: 12px 20px;
+    width: 268px;
+    max-height: 279px;
+    overflow: hidden;
+}
+
+.movie-card__date {
+    margin-bottom: 0;
+    font-size: 12px;
+    line-height: 22px;
+}
+
+.movie-card__tags {
+    width: 100%;
+    font-size: 12px;
+    line-height: 15px;
+}
+
+.movie-card__desc {
+    height: 129px;
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 22px;
+}
+
+.ant-tag {
+    margin: 0;
+    max-height: 60px;
+    overflow: hidden;
+    padding-left: 5px;
+    padding-right: 3px;
+}
+
+.ant-card-body {
+    display: flex;
+    padding: 0;
+}
+
+.ant-card-meta-title {
+    font-size: 20px;
+    line-height: 28px;
+}
