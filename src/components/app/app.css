@@ -1,7 +1,19 @@
 .app {
+    position: relative;
     background-color: #ffffff;
     width: 1010px;
     min-height: 100%;
     margin: auto;
     padding: 20px 32px;
+}
+
+.app__loader {
+    min-height: 500px;
+}
+
+.app__error {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    max-width: 500px;
 }

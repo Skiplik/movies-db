@@ -1,22 +1,37 @@
 export default class MovieService {
-    baseUrl = 'https://api.themoviedb.org/3';
+    baseUrl = 'https://api.themoviedb.org';
 
-    paramKey = 'api_key=f4aeda1b0b2427fbfef99b304986a9bd';
+    apiKey = 'f4aeda1b0b2427fbfef99b304986a9bd';
 
-    searchMovies = async (searchString) => {
-        const url = `${this.baseUrl}/search/movie?${this.paramKey}&query=${searchString}`;
+    async getResponse(path, params = {}) {
+        const url = new URL(`/3${path}`, this.baseUrl);
 
-        try {
-            const response = await fetch(url);
+        url.searchParams.set('api_key', this.apiKey);
 
-            const parseResponse = await response.json();
-
-            return parseResponse;
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.log(error);
-
-            return [];
+        for (const key in params) {
+            if (key in params && params[key] !== undefined) {
+                url.searchParams.set(key, params[key]);
+            }
         }
-    };
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            const { errors } = await response.json();
+
+            throw new Error(errors);
+        }
+
+        const parseResponse = await response.json();
+
+        return parseResponse;
+    }
+
+    async searchMovies(searchString) {
+        const response = await this.getResponse('/search/movie', {
+            query: searchString,
+        });
+
+        return response;
+    }
 }
