@@ -62,6 +62,8 @@ export default class MovieCard extends Component {
             movie: { title = '', release_date: date = null, overview: desc = '' },
         } = this.props;
 
+        const formatDate = date ? format(new Date(date), 'MMMM d, uuuu') : 'Release date not specified';
+
         return (
             <Card className="movie-card">
                 <Image className="movie-card__img" src={this.getImageSrc()} />
@@ -70,7 +72,7 @@ export default class MovieCard extends Component {
                     title={title}
                     description={
                         <Space direction="vertical" size={[7]}>
-                            <p className="movie-card__date">{format(new Date(date), 'MMMM d, uuuu')}</p>
+                            <p className="movie-card__date">{formatDate}</p>
                             <Space size={[8, 6]} className="movie-card__tags" wrap>
                                 {this.tagsList()}
                             </Space>

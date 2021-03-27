@@ -1,4 +1,6 @@
 .app {
+    display: flex;
+    flex-direction: column;
     position: relative;
     background-color: #ffffff;
     width: 1010px;
@@ -6,9 +8,27 @@
     margin: auto;
     padding: 20px 32px;
 }
+.app__search-input {
+    margin-bottom: 32px;
+}
+
+.app__content {
+    display: flex;
+    flex: 1;
+}
 
 .app__loader {
-    min-height: 500px;
+    width: 100%;
+}
+
+.app__space {
+    margin-top: -16px;
+    margin-bottom: 32px;
+}
+
+.app__pagination {
+    display: flex;
+    justify-content: center;
 }
 
 .app__error {

@@ -27,9 +27,10 @@ export default class MovieService {
         return parseResponse;
     }
 
-    async searchMovies(searchString) {
+    async searchMovies(query, page) {
         const response = await this.getResponse('/search/movie', {
-            query: searchString,
+            query,
+            page,
         });
 
         return response;
