@@ -1,0 +1,22 @@
+.rated__input {
+    margin-bottom: 32px;
+}
+
+.rated__content {
+    display: flex;
+    flex: 1;
+}
+
+.rated__loader {
+    width: 100%;
+}
+
+.rated__space {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.rated__pagination {
+    display: flex;
+    justify-content: center;
+}

@@ -1,0 +1,22 @@
+.search__input {
+    margin-bottom: 32px;
+}
+
+.search__content {
+    display: flex;
+    flex: 1;
+}
+
+.search__loader {
+    width: 100%;
+}
+
+.search__space {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.search__pagination {
+    display: flex;
+    justify-content: center;
+}

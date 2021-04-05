@@ -1,156 +1,61 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { Pagination, Space, Spin } from 'antd';
-import MovieCard from '../movie-card';
-import MovieSearch from '../movie-search';
+import { Tabs } from 'antd';
 import MovieService from '../../services/movie-service';
 import AppNotice from '../app-notice';
+import Search from '../search';
+import GenresContext from '../../genres-context';
 
 import './app.css';
+import Rated from '../rated';
 
-export default class App extends Component {
-    service = new MovieService();
+const { TabPane } = Tabs;
 
-    state = {
-        search: '',
-        movies: [],
+const { getGenres, getGuestSession, searchMovies, rateMovie, getRateMovies } = new MovieService();
 
-        pagination: {
-            page: 1,
-            totalResults: 0,
-        },
+const App = () => {
+    const [tab, setTab] = useState(1);
+    const [notice, setNotice] = useState(null);
+    const [genres, setGenres] = useState([]);
 
-        loading: false,
-        notice: null,
-    };
+    useEffect(() => {
+        async function initApp() {
+            const { genres: genresList } = await getGenres();
 
-    componentDidUpdate(prevProps, { search: prevSearch }) {
-        const { search } = this.state;
+            await getGuestSession();
 
-        if (search !== prevSearch) this.onChangeSearch();
-    }
-
-    onChangeSearch = () => {
-        const { search } = this.state;
-
-        const pagination = {
-            page: 1,
-            totalResults: 0,
-        };
-
-        if (!search) {
-            this.setState({
-                movies: [],
-                pagination,
-            });
-            return;
+            return genresList;
         }
 
-        this.getMovies({ search });
-    };
-
-    onError = ({ message = 'Something went wrong!' }) => {
-        const notice = {
-            type: 'error',
-            message,
-        };
-
-        const pagination = {
-            page: 1,
-            totalResults: 0,
-        };
-
-        this.setState({
-            notice,
-            pagination,
-            loading: false,
-        });
-    };
-
-    getMovies({ search, page = 1 }) {
-        this.setState({ loading: true });
-
-        this.service
-            .searchMovies(search, page)
-            .then(({ results: data = [], page: currentPage, total_results: totalResults }) => {
-                const pagination = {
-                    page: currentPage,
-                    totalResults,
-                };
-
-                this.setState({
-                    movies: data,
-                    pagination,
-                    loading: false,
-                });
+        initApp()
+            .then((genresList) => {
+                setGenres(genresList);
             })
-            .catch(this.onError);
-    }
+            .catch(({ message }) => {
+                setNotice({
+                    type: 'error',
+                    message,
+                });
+            });
+    }, []);
 
-    setSearch = (search) => this.setState({ search });
+    return (
+        <GenresContext.Provider value={genres}>
+            <Tabs className="app__container" activeKey={`${tab}`} onChange={setTab} centered>
+                <TabPane tab="Search" key="1">
+                    <Search
+                        searchMovies={(...args) => searchMovies(...args)}
+                        rateMovie={rateMovie}
+                        setNotice={setNotice}
+                    />
+                </TabPane>
+                <TabPane tab="Rated" key="2">
+                    <Rated visible={tab === '2'} getRateMovies={getRateMovies} setNotice={setNotice} />
+                </TabPane>
+            </Tabs>
+            <AppNotice notice={notice} />
+        </GenresContext.Provider>
+    );
+};
 
-    renderMovies = (movies, show) => {
-        if (!show) return null;
-
-        if (show && !movies.length) return 'No results ...';
-
-        return movies.map(({ id, ...movie }) => {
-            return <MovieCard key={id} movie={movie} />;
-        });
-    };
-
-    onChangePage = (page) => {
-        const { search } = this.state;
-
-        this.getMovies({ search, page });
-    };
-
-    checkMoviesState() {
-        const { notice, search, loading, movies } = this.state;
-
-        if ((loading && !movies.length) || !search || Boolean(notice)) return false;
-
-        return true;
-    }
-
-    render() {
-        const {
-            loading,
-            notice,
-            movies,
-            pagination: { page, totalResults: total },
-        } = this.state;
-
-        const showMovies = this.checkMoviesState();
-
-        const movieBox = this.renderMovies(movies, showMovies);
-
-        const pagination = !total ? null : (
-            <Pagination
-                current={page}
-                size="small"
-                total={total}
-                defaultPageSize={20}
-                showSizeChanger={false}
-                onChange={this.onChangePage}
-            />
-        );
-
-        return (
-            <>
-                <MovieSearch className="app__search-input" setSearch={this.setSearch} />
-                <div className="app__content">
-                    <Spin wrapperClassName="app__loader" size="large" spinning={loading} tip="Loading...">
-                        <div className="app__space">
-                            <Space size={[32, 32]} wrap>
-                                {movieBox}
-                            </Space>
-                        </div>
-                        <div className="app__pagination">{pagination}</div>
-                    </Spin>
-                </div>
-                <AppNotice notice={notice} />
-            </>
-        );
-    }
-}
+export default App;

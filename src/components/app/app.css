@@ -3,37 +3,33 @@
     flex-direction: column;
     position: relative;
     background-color: #ffffff;
-    width: 1010px;
+    width: 420px;
     min-height: 100%;
     margin: auto;
-    padding: 20px 32px;
-}
-.app__search-input {
-    margin-bottom: 32px;
+    padding: 16px 19px;
 }
 
-.app__content {
+@media (min-width: 1010px) {
+    .app {
+        width: 1010px;
+        padding: 20px 32px;
+    }
+
+    .app__error {
+        right: 20px;
+        bottom: 20px;
+        max-width: 500px;
+    }
+}
+
+.app__container {
     display: flex;
     flex: 1;
 }
 
-.app__loader {
-    width: 100%;
-}
-
-.app__space {
-    margin-top: -16px;
-    margin-bottom: 32px;
-}
-
-.app__pagination {
-    display: flex;
-    justify-content: center;
-}
-
 .app__error {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
-    max-width: 500px;
+    bottom: 0;
+    right: 0;
+    max-width: 420px;
 }
